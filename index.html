@@ -10,28 +10,42 @@
       var canvas;
       var canvasContext;
       var ballX = 50;
+      var ballSpeedX = 5;
 
       window.onload = function() {
         canvas = document.getElementById('game-canvas')
         canvasContext = canvas.getContext('2d');
 
-        setInterval(draweverything, 1000)
+        var framesPerSecond = 30;
+        setInterval(callBoth, 1000/framesPerSecond);
+
+
+      }
+      function callBoth(){
+        moveEverthing();
         draweverything();
-        draweverything();
-        draweverything();
+      }
+      function moveEverthing(){
+        ballX = ballX + ballSpeedX;
+        if (ballX < 0) {
+          ballSpeedX = -ballSpeedX;
+        }
+        if (ballX > canvas.width) {
+          ballSpeedX = -ballSpeedX;
+        }
 
       }
       function draweverything(){
-        ballX = ballX + 10;
-
-        console.log(ballX)
-        console.log("called draweverything");
-        canvasContext.fillStyle = 'black';
-        canvasContext.fillRect(0,0,canvas.width,canvas.height);
-        canvasContext.fillStyle ='red';
-        canvasContext.fillRect(100,200,50,50);
-        canvasContext.fillStyle ='green';
-        canvasContext.fillRect(ballX,250,50,50);
+// this line blinks ;out the screeb in Black
+        colorRect(0,0,canvas.width,canvas.height,'black');
+        // this line create the left side pad
+        colorRect(0,100,10,100,'white');
+        // this line used to create the ball
+        colorRect(ballX,100,20,20,'red');
+      }
+      function colorRect(leftX,topY, width,height, drawColor){
+        canvasContext.fillStyle = drawColor;
+        canvasContext.fillRect(leftX,topY, width,height);
       }
     </script>
 
