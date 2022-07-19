@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <canvas id="game-canvas" width="800" height="600"> </canvas>
+    <script type="text/javascript">
+      var canvas;
+      var canvasContext;
+      var ballX = 50;
+
+      window.onload = function() {
+        canvas = document.getElementById('game-canvas')
+        canvasContext = canvas.getContext('2d');
+
+        setInterval(draweverything, 1000)
+        draweverything();
+        draweverything();
+        draweverything();
+
+      }
+      function draweverything(){
+        ballX = ballX + 10;
+
+        console.log(ballX)
+        console.log("called draweverything");
+        canvasContext.fillStyle = 'black';
+        canvasContext.fillRect(0,0,canvas.width,canvas.height);
+        canvasContext.fillStyle ='red';
+        canvasContext.fillRect(100,200,50,50);
+        canvasContext.fillStyle ='green';
+        canvasContext.fillRect(ballX,250,50,50);
+      }
+    </script>
+
+  </body>
+</html>
