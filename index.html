@@ -20,8 +20,11 @@
       var player1Score = 0;
       var player2Score = 0;
 
+      const WINNING_SCORE = 3;
       const PAD_HEIGHT = 100;
       const PAD_THICKNESS = 10;
+
+      var showingWinScreen = false;
 
       function calMousePos(evt) {
         var rect = canvas.getBoundingClientRect();
@@ -34,6 +37,13 @@
         };
       }
 
+      function handleMouseClick(evt) {
+        if (showingWinScreen) {
+
+          showingWinScreen = false;
+        }
+      }
+
       window.onload = function() {
         canvas = document.getElementById('game-canvas')
         canvasContext = canvas.getContext('2d');
@@ -41,6 +51,7 @@
         var framesPerSecond = 30;
         setInterval(callBoth, 1000/framesPerSecond);
 
+        canvas.addEventListener('mousedown', handleMouseClick);
         canvas.addEventListener('mousemove',
       function (evt){
         var mousePos = calMousePos(evt);
@@ -49,6 +60,11 @@
 
       }
       function ballReset() {
+        if (player1Score >= WINNING_SCORE || player2Score >= WINNING_SCORE) {
+          player1Score = 0;
+          player2Score = 0;
+          showingWinScreen = true;
+        }
         ballSpeedX = -ballSpeedX;
         ballX = canvas.width/2;
         ballY = canvas.height/2;
@@ -68,6 +84,10 @@
         }
       }
       function moveEverthing(){
+        if (showingWinScreen) {
+          return;
+        }
+
         computerMovement();
 
         ballX += ballSpeedX;
@@ -76,20 +96,28 @@
         if (ballX < 0) {
           if (ballY > pad1Y && ballY < pad1Y + PAD_HEIGHT) {
             ballSpeedX = -ballSpeedX;
+
+            var deltaY = ballY-(pad1Y+ PAD_HEIGHT/2);
+            ballSpeedY = deltaY * 0.35;
           }
           else {
-            ballReset();
             player2Score ++;
+
+            ballReset();
           }
 
         }
         if (ballX > canvas.width) {
           if (ballY > pad2Y && ballY < pad2Y + PAD_HEIGHT) {
             ballSpeedX = -ballSpeedX;
+
+            var deltaY = ballY-(pad2Y+ PAD_HEIGHT/2);
+            ballSpeedY = deltaY * 0.35;
           }
           else {
-            ballReset();
             player1Score ++;
+
+            ballReset();
           }
         }
         if (ballY < 0) {
@@ -101,6 +129,17 @@
 
       }
       function draweverything(){
+        if (showingWinScreen) {
+          canvasContext.fillStyle= 'white';
+          if (player1Score>= WINNING_SCORE) {
+            canvasContext.fillText ("Click to Continue", 250,500);
+          } else if (player2Score >= WINNING_SCORE) {
+            canvasContext.fillText ("Click to Continue", 150,500);
+          }
+          canvasContext.fillText ("Click to Continue", 350,500);
+
+          return;
+        }
 // this line blinks ;out the screeb in Black
         colorRect(0,0,canvas.width,canvas.height,'black');
         // this line create the left side pad
